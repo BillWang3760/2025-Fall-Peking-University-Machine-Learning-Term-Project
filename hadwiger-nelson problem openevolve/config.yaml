@@ -1,0 +1,100 @@
+llm:
+  models:
+  - name: deepseek-coder
+    weight: 1.0
+    temperature: 0.8
+    max_tokens: 8000          
+    timeout: 300              
+    reasoning_effort: "high"  
+  api_base: https://api.deepseek.com/v1
+  api_key: ${DEEPSEEK_API_KEY}
+  retries: 5                  
+  retry_delay: 10             
+
+database:
+  num_islands: 3              
+  population_size: 150        
+  migration_interval: 15      
+  migration_rate: 0.15        
+  archive_size: 500           
+evaluator:
+  cascade_evaluation: false   
+  timeout: 120                
+  parallel_evaluations: 4     
+
+evolution:
+  iterations: 150             
+  population_size: 150        
+  tournament_size: 5          
+  mutation_rate: 0.5          
+  diff_based_evolution: true  
+  
+map_elites:
+  enabled: true
+  dimensions:
+    - name: n_triangles
+      bins: [0, 5, 10, 15, 20, 30, 50, 80]
+    - name: avg_degree
+      bins: [2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0]
+    - name: n_edges
+      bins: [5, 10, 20, 30, 50, 80, 120]
+    - name: n_vertices
+      bins: [5, 10, 15, 20, 30, 50, 80]
+
+prompts:
+  num_top_programs: 3
+  num_diverse_programs: 2
+  include_artifacts: true
+  
+  system_template: |
+    You are an expert in the Hadwiger-Nelson problem: finding unit distance graphs with high chromatic number.
+    
+    🎯 PRIMARY GOAL: Generate dense unit distance graphs with high chromatic number
+    
+    === CONSTRUCTION STRATEGIES ===
+    
+    1. **Circle Intersection Method** (de Grey's technique):
+       - For vertices at distance d ≤ 2, find unit circle intersections
+       - These points are at unit distance from both vertices
+       - Use `find_unit_circle_intersections()` function to systematically grow the graph
+    
+    2. **Hexagonal Symmetry**:
+       - Add hexagonal layers around key vertices
+       - Radius = 1.0 for unit distance connections
+       - Hexagonal patterns naturally create many triangles
+    
+    3. **Triangulation and Dense Packing**:
+       - Maximize the number of unit triangles
+       - High triangle count indicates strong chromatic constraints
+       - Dense graphs with high average degree are desirable
+    
+    === SCORING PRIORITIES ===
+    - Triangles: Very important (creates coloring constraints)
+    - Average degree: Important (connectivity)
+    - Edge density: Important (edges/vertices ratio)
+    - Graph size: Balance between small and large graphs
+    
+    === CONSTRAINTS ===
+    ✓ All edges MUST be unit distance: |vᵢ - vⱼ| = 1.0 ± 0.0001
+    ✓ No duplicate vertices (tolerance 1e-6)
+    ✓ Return: (np.ndarray[N,2], List[Tuple[int,int]])
+    
+    === BEST PRACTICES ===
+    ✓ Start with a small dense structure (e.g., equilateral triangles)
+    ✓ Use circle intersections to systematically add vertices
+    ✓ Maximize connections between existing vertices
+    ✓ Aim for high triangle count and average degree
+    
+    💡 TIP: Use the circle intersection method iteratively to grow dense, highly connected graphs!
+
+checkpoint:
+  enabled: true
+  interval: 10                
+  save_best: true
+  checkpoint_dir: openevolve_output/checkpoints
+  max_checkpoints: 5          
+  
+output:
+  base_dir: openevolve_output
+  save_code: true
+  save_metrics: true

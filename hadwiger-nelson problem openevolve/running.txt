@@ -1,0 +1,7 @@
+$env:DEEPSEEK_API_KEY="sk-1b631e523c14451389fa24649807ff0d"
+
+python openevolve-run.py initial_program.py evaluator.py --config config.yaml --iterations 50
+
+python openevolve-run.py initial_program.py evaluator.py --config config.yaml --checkpoint checkpoint_directory --iterations 50
+
+python scripts/visualizer.py --path openevolve_output/checkpoints/checkpoint_100/
