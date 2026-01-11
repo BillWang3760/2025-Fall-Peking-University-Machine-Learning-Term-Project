@@ -1,0 +1,74 @@
+max_iterations: 100
+checkpoint_interval: 10
+log_level: INFO
+log_dir: null
+random_seed: 42
+diff_based_evolution: true
+max_code_length: 10000
+early_stopping_patience: null
+convergence_threshold: 0.001
+early_stopping_metric: combined_score
+llm:
+  models:
+  - name: deepseek-chat
+    weight: 1.0
+  api_base: https://api.deepseek.com/v1
+  api_key: ${DEEPSEEK_API_KEY}
+  temperature: 0.7
+  max_tokens: 8000
+  timeout: 120
+prompt:
+  template_dir: null
+  system_message: You are an expert coder helping to improve programs through evolution.
+  evaluator_system_message: You are an expert code reviewer.
+  num_top_programs: 3
+  num_diverse_programs: 2
+  use_template_stochasticity: true
+  template_variations:
+    improvement_suggestion:
+    - 'Here''s how we could improve this code:'
+    - 'I suggest the following improvements:'
+    - 'We can enhance this code by:'
+  include_artifacts: true
+  max_artifact_bytes: 20480
+  artifact_security_filter: true
+  suggest_simplification_after_chars: 500
+  include_changes_under_chars: 100
+  concise_implementation_max_lines: 10
+  comprehensive_implementation_min_lines: 50
+database:
+  db_path: null
+  in_memory: true
+  log_prompts: true
+  population_size: 1000
+  archive_size: 100
+  num_islands: 5
+  migration_interval: 50
+  migration_rate: 0.1
+  elite_selection_ratio: 0.1
+  exploration_ratio: 0.2
+  exploitation_ratio: 0.7
+  feature_dimensions:
+  - complexity
+  - diversity
+  feature_bins: 10
+  diversity_reference_size: 20
+evaluator:
+  timeout: 300
+  max_retries: 3
+  cascade_evaluation: true
+  cascade_thresholds:
+  - 0.5
+  - 0.75
+  - 0.9
+  parallel_evaluations: 4
+  use_llm_feedback: false
+  llm_feedback_weight: 0.1
+evolution_trace:
+  enabled: false
+  format: jsonl
+  include_code: false
+  include_prompts: true
+  output_path: null
+  buffer_size: 10
+  compress: false

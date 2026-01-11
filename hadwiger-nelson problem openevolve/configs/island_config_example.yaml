@@ -1,0 +1,34 @@
+max_iterations: 1000
+checkpoint_interval: 100
+log_level: INFO
+llm:
+  models:
+  - name: deepseek-chat
+    weight: 1.0
+  api_base: https://api.deepseek.com/v1
+  api_key: ${DEEPSEEK_API_KEY}
+  temperature: 0.7
+  max_tokens: 8000
+  timeout: 120
+database:
+  population_size: 500
+  archive_size: 100
+  num_islands: 5
+  migration_interval: 50
+  migration_rate: 0.1
+  elite_selection_ratio: 0.1
+  exploration_ratio: 0.3
+  exploitation_ratio: 0.7
+  feature_bins: 10
+prompt:
+  num_top_programs: 3
+  num_diverse_programs: 2
+  use_template_stochasticity: true
+evaluator:
+  timeout: 300
+  max_retries: 3
+  cascade_evaluation: true
+  parallel_evaluations: 4
+diff_based_evolution: true
+allow_full_rewrites: false
+max_code_length: 10000

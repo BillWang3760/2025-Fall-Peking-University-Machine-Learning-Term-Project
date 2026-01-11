@@ -1,0 +1,54 @@
+max_iterations: 1000
+random_seed: 42
+checkpoint_interval: 50
+log_level: INFO
+llm:
+  models:
+  - name: deepseek-chat
+    weight: 1.0
+  api_base: https://api.deepseek.com/v1
+  api_key: ${DEEPSEEK_API_KEY}
+  temperature: 0.7
+  max_tokens: 8000
+  timeout: 120
+database:
+  population_size: 500
+  archive_size: 100
+  num_islands: 5
+  migration_interval: 20
+  migration_rate: 0.1
+  feature_dimensions:
+  - complexity
+  - diversity
+  feature_bins: 10
+  elite_selection_ratio: 0.1
+  exploitation_ratio: 0.7
+  exploration_ratio: 0.2
+evaluator:
+  timeout: 300
+  max_retries: 3
+  parallel_evaluations: 4
+  cascade_evaluation: true
+  cascade_thresholds:
+  - 0.5
+  - 0.75
+  - 0.9
+  use_llm_feedback: false
+  llm_feedback_weight: 0.1
+prompt:
+  system_message: You are an expert coder helping to improve programs through evolution.
+  num_top_programs: 3
+  num_diverse_programs: 2
+  include_artifacts: true
+  max_artifact_bytes: 20480
+  use_template_stochasticity: true
+  template_dir: null
+diff_based_evolution: true
+max_code_length: 20000
+early_stopping_patience: 50
+convergence_threshold: 0.001
+evolution_trace:
+  enabled: false
+  format: jsonl
+  include_code: false
+  include_prompts: true
